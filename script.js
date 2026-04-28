@@ -17,17 +17,31 @@ window.openTab = function(evt, tabName) {
             title.classList.add('typing-animation'); 
         }
         setTimeout(() => selected.classList.add("active-content"), 10);
+        
+        // АНИМАЦИЯ НАВЫКОВ (Полосы + Круг)
         if (tabName === 'skills') {
-            document.querySelectorAll('#skills .percent-fill').forEach(circle => {
+            // 1. Анимация линейных полос
+            document.querySelectorAll('.skill-progress-fill').forEach(bar => {
+                const percent = bar.getAttribute('data-percent'); 
+                bar.style.transition = 'none'; 
+                bar.style.width = '0%'; 
+                setTimeout(() => { 
+                    bar.style.transition = 'width 1.5s cubic-bezier(0.1, 0.42, 0.41, 1)'; 
+                    bar.style.width = percent + '%'; 
+                }, 50);
+            });
+
+            // 2. Анимация кругового индикатора (Self-management)
+            document.querySelectorAll('.special-skill-center .percent-fill').forEach(circle => {
                 const parent = circle.closest('.progress-circle');
                 const percent = parent.style.getPropertyValue('--percent') || 90;
                 const offset = 339.29 - (339.29 * percent) / 100;
-                circle.style.transition = 'none'; 
+                circle.style.transition = 'none';
                 circle.style.strokeDashoffset = '339.29';
-                setTimeout(() => { 
-                    circle.style.transition = 'stroke-dashoffset 0.8s ease-out'; 
-                    circle.style.strokeDashoffset = offset; 
-                }, 50);
+                setTimeout(() => {
+                    circle.style.transition = 'stroke-dashoffset 1.5s ease-out';
+                    circle.style.strokeDashoffset = offset;
+                }, 100);
             });
         }
     }
@@ -44,7 +58,6 @@ window.scrollToPage = function(pageIndex) {
         behavior: 'smooth' 
     });
 };
-
 // 2. ИНИЦИАЛИЗАЦИЯ ИНТЕРФЕЙСА
 document.addEventListener('DOMContentLoaded', () => {
     const scrollContainer = document.querySelector('.scroll-container');
@@ -55,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dot = document.querySelector('.cursor-dot');
     const outline = document.querySelector('.cursor-outline');
     let isAnimating = false;
+
     // 3. ЛОГИКА СКРОЛЛА (Колесо мыши)
     scrollContainer.addEventListener('wheel', (e) => {
         e.preventDefault(); 
